@@ -1,0 +1,17 @@
+---
+# tasks file for copy_bio_compose
+- name: Copy files
+  copy: 
+    src: bio_chromium
+    dest: /home/bio/docker-compose/
+
+# - name: Add hostname in docker-compose file
+#   lineinfile:
+#     path: /home/bio/docker-compose/bio_chromium/docker-compose.yml
+#     regexp: '^    - HOSTNAME='
+#     line: '    - HOSTNAME={{ HOSTNAME_BIO }}'
+
+# - name: Start docker-compose
+#   shell: docker-compose up
+#   args:
+#     chdir: /home/bio/docker-compose/bio_chromium

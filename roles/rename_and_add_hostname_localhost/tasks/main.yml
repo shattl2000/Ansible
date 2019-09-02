@@ -1,0 +1,16 @@
+---
+# tasks file for rename_and_add_hostname_localhost
+- name: Add hostname
+  shell: echo '127.0.0.1  {{ HOSTNAME_BIO }}' >> /etc/hosts
+
+- name: Change cloud.cfg
+  lineinfile:
+    path: /etc/cloud/cloud.cfg
+    regexp: '^preserve_hostname: false'
+    line: 'preserve_hostname: true'
+
+- name: Change hostname
+  command: "{{ item }}"
+  loop:
+    - touch /etc/cloud/cloud-init.disabled
+    - hostnamectl set-hostname {{ HOSTNAME_BIO }}

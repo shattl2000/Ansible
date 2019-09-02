@@ -1,0 +1,4 @@
+---
+# tasks file for install_gnupg2
+- name: Install gnupg2
+  shell: apt install -y gnupg2 pass

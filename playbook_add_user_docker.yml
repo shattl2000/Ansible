@@ -1,0 +1,7 @@
+---
+- name: Docker users
+  hosts: BIO
+  become: yes
+
+  roles:
+    - add_user_docker

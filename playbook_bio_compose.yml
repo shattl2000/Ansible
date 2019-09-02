@@ -1,0 +1,7 @@
+---
+- name: Copy docker-compose files
+  hosts: BIO
+  become: yes
+
+  roles:
+    - copy_bio_compose

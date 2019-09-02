@@ -1,0 +1,4 @@
+---
+# tasks file for resolve_local
+- name: Start shell
+  command: ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf

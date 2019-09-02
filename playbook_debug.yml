@@ -1,0 +1,36 @@
+---
+- name: Play book for Variables
+  hosts: all
+  become: yes
+
+  vars:
+    massage1: Hello
+    massage2: World
+    secret: 123text
+
+
+  tasks:
+
+  - name: Print Secret Variable
+    debug:
+      var: secret
+
+  - debug:
+      msg: "Secret word {{ secret }}"
+
+  - debug:
+      msg: "Owner this server {{ owner }}"
+
+  - set_fact: full_message="{{ massage1 }} {{massage2 }} from {{ owner }}"
+
+  - debug:
+      var: full_message
+
+  - debug:
+      var: ansible_distribution
+
+  - shell: uptime
+    register: results
+
+  - debug:
+      var: results.stdout

@@ -1,0 +1,8 @@
+---
+- name: Install Python
+  hosts: BIO
+  remote_user: bio
+  become: yes
+
+  roles:
+    - install_python

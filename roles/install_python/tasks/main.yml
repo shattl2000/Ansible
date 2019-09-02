@@ -1,0 +1,4 @@
+---
+# tasks file for install_python
+- name: Install Python
+  raw: /usr/bin/python || (apt -y update && apt install -y python)

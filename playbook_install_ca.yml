@@ -1,0 +1,7 @@
+---
+- name: Copy ca
+  hosts: BIO
+  become: yes
+
+  roles:
+    - install_ca

@@ -1,0 +1,7 @@
+---
+- name: Resolve local domain
+  hosts: BIO
+  become: yes
+
+  roles:
+    - resolve_local

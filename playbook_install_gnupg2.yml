@@ -1,0 +1,7 @@
+---
+- name: Install gnupg2 pass
+  hosts: BIO
+  become: yes
+
+  roles:
+    - install_gnupg2

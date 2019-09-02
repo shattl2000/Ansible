@@ -1,0 +1,14 @@
+---
+- name: Copy and Install deb TeamViewer
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Copy deb Package
+    copy: 
+      src: /home/avk/Загрузки/teamviewer_14.2.2558_amd64.deb
+      dest: /home/avk/dist
+
+  - name: Install deb Package
+    apt:
+      deb: /home/avk/dist/teamviewer_14.2.2558_amd64.deb

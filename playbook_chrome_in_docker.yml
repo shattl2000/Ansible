@@ -1,0 +1,23 @@
+---
+- name: Start Google Chrome on Docker
+  hosts: all
+  become: yes
+  become_user: avk
+
+  tasks:
+  - name: Pull Docker Image
+    docker_image:
+      name: shattl2000/chrome         
+
+  - name: Create container my_chrome
+    docker_container:
+      name: my_chrome
+      image: shattl2000/chrome
+      state: started
+      privileged : yes
+      network_mode: host
+      log_driver: journald
+      volumes:
+        - "/tmp/:/tmp/:rw"
+        - "/dev/shm:/dev/shm:rw"
+        - "/home/avk/:/home/docker/:rw"

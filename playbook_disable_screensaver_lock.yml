@@ -1,0 +1,14 @@
+---
+- name: Disable screensaver lock
+  hosts: all
+  become: yes
+  become_user: avk
+
+  tasks:
+  - name: Start shell
+    command: "{{ item }}"
+    loop:
+      - dbus-launch gsettings set org.gnome.desktop.screensaver lock-enabled false
+      - dbus-launch gsettings set org.gnome.desktop.lockdown disable-lock-screen true
+      - dbus-launch gsettings set org.gnome.desktop.session idle-delay 0
+

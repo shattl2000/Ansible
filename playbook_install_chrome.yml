@@ -1,0 +1,19 @@
+---
+- name: Install default Google Chrome
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Add Chrome apt key
+    apt_key:
+      url: 'https://dl.google.com/linux/linux_signing_key.pub' 
+
+  - name: Add apt repo Google Chrome
+    apt_repository:
+      repo: "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
+      filename: google-chrome-stable
+
+  - name: Start Install Google Chrome and update repositories
+    apt:
+      name: google-chrome-stable
+      update_cache: yes

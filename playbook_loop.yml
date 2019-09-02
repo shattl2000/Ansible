@@ -1,0 +1,31 @@
+---
+- name: Loops Playbook
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Say Hello to All
+    debug: msg="Hello {{ item }}"
+    loop:
+      - "Vasya"
+      - "Petya"
+      - "Masha"
+      - "Olya"
+
+  - name: Loop Until example
+    shell: echo -n Z >> myfile.txt && cat myfile.txt
+    register: output
+    delay: 2
+    retries: 10
+    until: output.stdout.find("ZZZZ") == false
+
+  - name: Print final outout
+    debug:
+      var: outout.stdout
+
+#  - name: Install many packages
+#    apt: name={{ item }} state=installed
+#    loop:
+#      - python
+#      - nano
+#      - mysql

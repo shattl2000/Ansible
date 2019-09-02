@@ -1,0 +1,14 @@
+---
+- name: Full install bio
+  hosts: BIO
+  become: yes
+
+  roles:
+    - rename_and_add_hostname_localhost
+    - install_python
+    - install_docker
+    - add_user_docker
+    - install_ca
+    - copy_bio_compose
+    - resolve_local
+    - install_gnupg2

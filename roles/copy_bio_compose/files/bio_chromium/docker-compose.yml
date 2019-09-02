@@ -1,0 +1,147 @@
+version: '3'
+volumes:
+  public_volume:
+services:
+  bio_server:
+    image: gitlab.pridex.local:5443/andrey.mamaev/bio/bio_server
+    container_name: bio_server
+    network_mode: bridge
+    restart: always
+    ports:
+    - "80:9000"
+    volumes:
+    - public_volume:/bio/public
+    - /etc/timezone:/etc/timezone:ro
+    - /etc/localtime:/etc/localtime:ro
+    environment:
+    - INV_NUM=
+    - HOSTNAME=
+    - TOKEN=
+  bio_hid:
+    image: gitlab.pridex.local:5443/andrey.mamaev/bio/bio_hid
+    container_name: bio_hid
+    network_mode: bridge
+    restart: always
+    privileged: true
+    depends_on:
+    - bio_server
+    links:
+    - bio_server
+    volumes:
+    - /etc/timezone:/etc/timezone:ro
+    - /etc/localtime:/etc/localtime:ro
+    environment:
+    - HID_SCANNER_NUM=
+    - TOKEN=
+    - URL="http://bio_server:9000"
+  bio_sensor:
+    image: gitlab.pridex.local:5443/andrey.mamaev/bio/bio_biosensor
+    container_name: bio_sensor
+    network_mode: bridge
+    restart: always
+    privileged: true
+    depends_on:
+    - bio_server
+    links:
+    - bio_server
+    volumes:
+    - public_volume:/bio/public
+    - /etc/timezone:/etc/timezone:ro
+    - /etc/localtime:/etc/localtime:ro
+    environment:
+    - ENTER_DEVICE_SN=
+    - SENSORDELAY=100
+    - MINSCORE=0
+    - URL_API=http://api.pridex.ru:8080
+    - TOKEN_API=
+    - LOADPERIOD=20
+    - HOSTNAME=
+    - TOKEN=
+    - URL=http://bio_server:9000
+  bio_updater:
+    image: gitlab.pridex.local:5443/andrey.mamaev/bio/bio_updater
+    container_name: bio_updater
+    network_mode: bridge
+    restart: always
+    depends_on:
+    - bio_server
+    links:
+    - bio_server
+    volumes:
+    - /etc/timezone:/etc/timezone:ro
+    - /etc/localtime:/etc/localtime:ro
+    environment:
+    - DELAY=10
+    - URL_API=
+    - TOKEN_API=http://api.pridex.ru:8080
+    - HOSTNAME=
+    - TOKEN=
+    - URL=http://bio_server:9000
+  bio_transmitter:
+    image: gitlab.pridex.local:5443/andrey.mamaev/bio/bio_transmitter
+    container_name: bio_transmitter
+    network_mode: bridge
+    restart: always
+    depends_on:
+    - bio_server
+    links:
+    - bio_server
+    volumes:
+    - /etc/timezone:/etc/timezone:ro
+    - /etc/localtime:/etc/localtime:ro
+    environment:
+    - DELAY=15
+    - NATS_SERVERS=
+    - NATS_TOKEN=
+    - HOSTNAME=
+    - TOKEN=
+    - URL=http://bio_server:9000
+  bio_flasher:
+    image: gitlab.pridex.local:5443/andrey.mamaev/bio/bio_flasher
+    container_name: bio_flasher
+    network_mode: bridge
+    restart: always
+    privileged: true
+    depends_on:
+    - bio_server
+    links:
+    - bio_server
+    volumes:
+    - /etc/timezone:/etc/timezone:ro
+    - /etc/localtime:/etc/localtime:ro
+    environment:
+    - TOKEN=
+    - URL=http://bio_server:9000
+  bio_chromium:
+    build: .
+    container_name: x-server_container
+    #restart: always
+    privileged: true
+    network_mode: bridge
+    shm_size: 1024M
+    depends_on:
+    - bio_server
+    links:
+    - bio_server
+    volumes:
+    - /run/udev:/run/udev
+    - /run/dbus:/run/dbus
+    - /run/systemd:/run/systemd
+  zabbixagent:
+    image: gitlab.pridex.local:5443/andrey.mamaev/bio/bio_zabbix
+    container_name: zabbixagent
+    network_mode: bridge
+    restart: always
+    privileged: true
+    links:
+    - bio_server
+    security_opt:
+    - seccomp:unconfined
+    ports:
+    - "10050:10050"
+    volumes:
+    - /etc/timezone:/etc/timezone:ro
+    - /etc/localtime:/etc/localtime:ro
+    environment:
+    - ZBX_SERVER_HOST=zabbix.pridex.ru,proxy.zabbix.pridex.local
+    - BIOSERVER=bio_server:9000

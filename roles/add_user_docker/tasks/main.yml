@@ -1,0 +1,11 @@
+---
+# tasks file for add_user_docker
+- name: Add User in group Docker
+  shell: usermod -a -G docker bio # bio - имя пользователя
+  # shell: gpasswd -a $USER docker
+  # shell: newgrp docker
+
+- name: Restart Docker Service
+  service: 
+    name: docker
+    state: restarted

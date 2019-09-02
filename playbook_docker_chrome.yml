@@ -1,0 +1,21 @@
+---
+- name: Start Google Chrome on Docker
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Copy Dockerfile and Scripts
+    copy: 
+      src: /home/avk/docker/chrome/
+      dest: /home/avk/dist/docker/chrome/
+      mode: ugo+rx
+
+  - name: Create Docker Image
+    shell: docker build -t chrome .
+    args:
+      chdir: /home/avk/dist/docker/chrome/
+            
+  - name: Start chrome in container
+    shell: ./chrome.sh
+    args:
+      chdir: /home/avk/dist/docker/chrome/

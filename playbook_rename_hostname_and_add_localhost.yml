@@ -1,0 +1,7 @@
+---
+- name: Rename hostname and add in localhost
+  hosts: BIO
+  become: yes
+
+  roles:
+    - rename_and_add_hostname_localhost

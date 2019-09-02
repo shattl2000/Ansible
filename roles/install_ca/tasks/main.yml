@@ -1,0 +1,12 @@
+---
+# tasks file for install_ca
+- name: Copy files
+  copy:
+    src: ca_2019.crt
+    dest: /usr/local/share/ca-certificates/ca_2019.crt
+
+- name: Update cert index
+  command: update-ca-certificates
+
+- name: Enable ca
+  shell: echo 'ca_2019.crt' >> /etc/ca-certificates.conf
