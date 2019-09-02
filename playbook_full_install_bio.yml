@@ -10,5 +10,6 @@
     - add_user_docker
     - install_ca
     - copy_bio_compose
+    - set_hostname_docker-compose
     - resolve_local
     - install_gnupg2
