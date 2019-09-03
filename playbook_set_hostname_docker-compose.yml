@@ -1,5 +1,5 @@
 ---
-- name: Copy docker-compose files
+- name: Set hostname in docker-compose file
   hosts: BIO
   become: yes
 
